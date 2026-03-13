@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.SmartExpensePro" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">#7986CB</item>
+        <item name="colorPrimaryVariant">#5C6BC0</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondary">@color/accent</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="android:statusBarColor">#303F9F</item>
+    </style>
+
+    <style name="Theme.SmartExpensePro.Splash" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:windowBackground">#3949AB</item>
+        <item name="android:statusBarColor">#303F9F</item>
+        <item name="colorPrimary">#7986CB</item>
+    </style>
+
+</resources>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SmartExpensePro</string>
+    <string name="login">Sign In</string>
+    <string name="register">Register</string>
+    <string name="logout">Logout</string>
+    <string name="add_expense">Add Expense</string>
+    <string name="analytics">Analytics</string>
+    <string name="export">Export</string>
+    <string name="total_expenses">Total Expenses</string>
+    <string name="no_transactions">No transactions yet</string>
+</resources>
