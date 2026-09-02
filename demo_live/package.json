@@ -1,0 +1,21 @@
+{
+  "name": "smartexpensepro-live-demo",
+  "version": "1.0.0",
+  "description": "SmartExpensePro Interactive Live Web Demo & APK Download Portal",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "build": "echo 'Ready'"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "expense-tracker",
+    "android",
+    "demo",
+    "render"
+  ],
+  "author": "SmartExpensePro",
+  "license": "MIT"
+}

@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SmartExpensePro - Interactive Live Demo</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Top Navigation & Controls Bar -->
+  <header class="top-nav">
+    <div class="brand">
+      <div class="brand-icon">
+        <i data-lucide="wallet-cards"></i>
+      </div>
+      <div class="brand-text">
+        <span class="app-title">SmartExpensePro</span>
+        <span class="badge-live"><span class="pulse-dot"></span> LIVE DEMO</span>
+      </div>
+    </div>
+
+    <div class="top-actions">
+      <button class="nav-btn" id="btnToggleFrame" title="Toggle Phone Frame Mode">
+        <i data-lucide="smartphone"></i>
+        <span>Device View</span>
+      </button>
+
+      <button class="nav-btn" id="btnResetData" title="Reset Demo Data">
+        <i data-lucide="refresh-cw"></i>
+        <span>Reset Data</span>
+      </button>
+
+      <a href="./SmartExpensePro-release.apk" class="btn-primary-action" download="SmartExpensePro-release.apk">
+        <i data-lucide="download"></i>
+        <span>Download APK (4.6MB)</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="demo-wrapper">
+    <!-- Simulator Outer Frame -->
+    <div class="phone-container" id="phoneContainer">
+      <div class="phone-mockup">
+        <div class="phone-speaker"></div>
+        <div class="phone-camera"></div>
+
+        <!-- Phone Screen Inside -->
+        <div class="phone-screen" id="appRoot">
+          <!-- Status Bar -->
+          <div class="mobile-status-bar">
+            <span class="status-time" id="statusTime">09:41</span>
+            <div class="status-icons">
+              <i data-lucide="signal" class="status-icon"></i>
+              <i data-lucide="wifi" class="status-icon"></i>
+              <i data-lucide="battery-full" class="status-icon"></i>
+            </div>
+          </div>
+
+          <!-- SCREEN: Splash -->
+          <div class="screen active" id="screenSplash">
+            <div class="splash-content">
+              <div class="splash-logo">
+                <i data-lucide="wallet-cards"></i>
+              </div>
+              <h1 class="splash-title">SmartExpensePro</h1>
+              <p class="splash-tagline">Smart Expense Tracker & AI SMS Parser</p>
+              <div class="splash-loader">
+                <div class="spinner"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- SCREEN: Auth (Login / Register) -->
+          <div class="screen" id="screenAuth">
+            <div class="auth-header">
+              <div class="auth-logo-badge">
+                <i data-lucide="shield-check"></i>
+              </div>
+              <h2 id="authTitle">Welcome Back 👋</h2>
+              <p id="authSubtitle">Track, analyze, and save smarter</p>
+            </div>
+
+            <form id="authForm" class="auth-form" onsubmit="event.preventDefault();">
+              <div class="input-group" id="groupName" style="display: none;">
+                <label><i data-lucide="user"></i> Full Name</label>
+                <input type="text" id="inputName" placeholder="e.g. Sowndharya PL" />
+              </div>
+
+              <div class="input-group">
+                <label><i data-lucide="mail"></i> Email Address</label>
+                <input type="email" id="inputEmail" placeholder="demo@smartexpense.pro" value="demo@smartexpense.pro" required />
+              </div>
+
+              <div class="input-group">
+                <label><i data-lucide="lock"></i> Password</label>
+                <input type="password" id="inputPassword" placeholder="••••••••" value="demo1234" required />
+              </div>
+
+              <button type="submit" class="btn-app-primary" id="btnAuthSubmit">
+                <span>Login</span>
+                <i data-lucide="arrow-right"></i>
+              </button>
+
+              <button type="button" class="btn-demo-quick" id="btnQuickDemo">
+                <i data-lucide="zap"></i> Quick One-Click Demo Login
+              </button>
+
+              <div class="auth-switch">
+                <span id="authSwitchText">Don't have an account?</span>
+                <a href="#" id="btnToggleAuthMode">Register now</a>
+              </div>
+            </form>
+          </div>
+
+          <!-- SCREEN: Main Dashboard -->
+          <div class="screen" id="screenDashboard">
+            <!-- App Toolbar -->
+            <div class="app-toolbar">
+              <div class="user-greeting">
+                <div class="avatar" id="userAvatar">S</div>
+                <div>
+                  <span class="greeting-sub">Welcome back,</span>
+                  <h3 class="user-name" id="displayUserName">Sowndharya 👋</h3>
+                </div>
+              </div>
+              <div class="toolbar-actions">
+                <button class="icon-btn" id="btnOpenSmsModal" title="SMS Auto-Expense Parser Simulator">
+                  <i data-lucide="message-square-plus"></i>
+                  <span class="action-badge-dot"></span>
+                </button>
+                <button class="icon-btn" id="btnLogout" title="Logout">
+                  <i data-lucide="log-out"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Scrollable Dashboard Content -->
+            <div class="dashboard-scrollable">
+              <!-- Total Debited Expense Card -->
+              <div class="balance-card">
+                <div class="card-glass-glow"></div>
+                <div class="balance-meta">
+                  <span class="balance-label">Total Debited Amount</span>
+                  <span class="balance-chip"><i data-lucide="shield-check"></i> Debit Only</span>
+                </div>
+                <div class="balance-amount" id="displayNetBalance">₹ 22,150.00</div>
+
+                <div class="balance-stats-row">
+                  <div class="stat-col expense">
+                    <div class="stat-icon-wrapper">
+                      <i data-lucide="arrow-up-right"></i>
+                    </div>
+                    <div>
+                      <span class="stat-title">Total Debited</span>
+                      <span class="stat-val" id="displayTotalExpense">₹ 22,150.00</span>
+                    </div>
+                  </div>
+
+                  <div class="stat-divider"></div>
+
+                  <div class="stat-col debited-rule">
+                    <div class="stat-icon-wrapper" style="background: rgba(99, 102, 241, 0.15); color: #818CF8;">
+                      <i data-lucide="filter-x"></i>
+                    </div>
+                    <div>
+                      <span class="stat-title">Credit Filter</span>
+                      <span class="stat-val" style="color: #94A3B8; font-size: 0.76rem;">Credits Ignored</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Quick Actions Grid -->
+              <div class="quick-actions-bar">
+                <button class="action-tile" id="btnQuickAddExpense">
+                  <div class="tile-icon icon-red"><i data-lucide="minus-circle"></i></div>
+                  <span>Add Expense</span>
+                </button>
+                <button class="action-tile" id="btnOpenSmsAction">
+                  <div class="tile-icon icon-purple"><i data-lucide="bot"></i></div>
+                  <span>SMS Parser</span>
+                </button>
+                <button class="action-tile" id="btnNavAnalytics">
+                  <div class="tile-icon icon-blue"><i data-lucide="pie-chart"></i></div>
+                  <span>Analytics</span>
+                </button>
+                <button class="action-tile" id="btnQuickExport">
+                  <div class="tile-icon icon-green"><i data-lucide="file-spreadsheet"></i></div>
+                  <span>Export CSV</span>
+                </button>
+              </div>
+
+              <!-- Spending Limit & Monthly Budget Widget -->
+              <div class="budget-widget">
+                <div class="budget-header">
+                  <div>
+                    <span class="widget-title">Monthly Expense Budget</span>
+                    <span class="widget-subtitle" id="budgetSubtitle">₹ 22,150 debited of ₹ 40,000</span>
+                  </div>
+                  <span class="budget-percent" id="budgetPercent">55%</span>
+                </div>
+                <div class="progress-bar-bg">
+                  <div class="progress-fill" id="budgetProgress" style="width: 55%;"></div>
+                </div>
+              </div>
+
+              <!-- Recent Transactions Section -->
+              <div class="transactions-section">
+                <div class="section-header">
+                  <h4 class="section-title">Debited Transactions</h4>
+                  <span class="item-count" id="transactionCountBadge">7 records</span>
+                </div>
+
+                <!-- Category Filters Pill Row -->
+                <div class="category-filters-scroll" id="categoryFilterContainer">
+                  <button class="cat-pill active" data-filter="All">All Debits</button>
+                  <button class="cat-pill" data-filter="Food">🍔 Food</button>
+                  <button class="cat-pill" data-filter="Travel">🚗 Travel</button>
+                  <button class="cat-pill" data-filter="Bills">💡 Bills</button>
+                  <button class="cat-pill" data-filter="Shopping">🛍️ Shopping</button>
+                  <button class="cat-pill" data-filter="Health">💊 Health</button>
+                  <button class="cat-pill" data-filter="Entertainment">🎬 Entertainment</button>
+                  <button class="cat-pill" data-filter="Education">📚 Education</button>
+                  <button class="cat-pill" data-filter="Others">📦 Others</button>
+                </div>
+
+                <!-- Transactions List -->
+                <div class="tx-list" id="transactionListContainer">
+                  <!-- Generated dynamically via JS -->
+                </div>
+
+                <!-- Empty State -->
+                <div class="empty-state" id="emptyState" style="display: none;">
+                  <div class="empty-icon"><i data-lucide="receipt-text"></i></div>
+                  <h5>No transactions found</h5>
+                  <p>Tap below to add your first expense or parse an SMS</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Floating Action Button -->
+            <button class="mobile-fab" id="fabAdd" title="Add New Transaction">
+              <i data-lucide="plus"></i>
+            </button>
+          </div>
+
+          <!-- SCREEN: Analytics & Insights -->
+          <div class="screen" id="screenAnalytics">
+            <div class="app-toolbar-sub">
+              <button class="icon-btn-back" id="btnBackFromAnalytics">
+                <i data-lucide="chevron-left"></i>
+              </button>
+              <h3 class="toolbar-sub-title">Spending Analytics</h3>
+              <div style="width: 36px;"></div>
+            </div>
+
+            <div class="analytics-scrollable">
+              <!-- Summary Card -->
+              <div class="analytics-summary-card">
+                <span class="analytics-sub">Total Spent this Month</span>
+                <h2 class="analytics-total" id="analyticsTotalExpense">₹ 22,150.00</h2>
+                <div class="analytics-badge-row">
+                  <span class="badge-smart-insight"><i data-lucide="sparkles"></i> Highest in <strong>Food (36%)</strong></span>
+                </div>
+              </div>
+
+              <!-- Category Donut Chart Container -->
+              <div class="chart-card">
+                <div class="chart-header">
+                  <h5>Expenses by Category</h5>
+                </div>
+                <div class="chart-canvas-wrapper">
+                  <canvas id="categoryPieChart"></canvas>
+                </div>
+              </div>
+
+              <!-- Weekly Trend Bar Chart -->
+              <div class="chart-card">
+                <div class="chart-header">
+                  <h5>Weekly Spend Comparison</h5>
+                </div>
+                <div class="chart-canvas-wrapper" style="height: 180px;">
+                  <canvas id="weeklyBarChart"></canvas>
+                </div>
+              </div>
+
+              <!-- Category-wise Breakdown Cards -->
+              <div class="category-breakdown-section" id="categoryBreakdownList">
+                <!-- Dynamically populated -->
+              </div>
+            </div>
+          </div>
+
+          <!-- MODAL: Add Expense -->
+          <div class="app-modal" id="modalAddTransaction">
+            <div class="modal-backdrop" id="closeAddModalBackdrop"></div>
+            <div class="modal-sheet">
+              <div class="modal-grabber"></div>
+              <div class="modal-header">
+                <div>
+                  <h4 id="modalAddTitle">Add Debited Expense</h4>
+                  <span class="modal-sub">Log a new expense deduction</span>
+                </div>
+                <button class="btn-close-modal" id="btnCloseAddModal"><i data-lucide="x"></i></button>
+              </div>
+
+              <form id="formAddTransaction" class="modal-body-form" onsubmit="event.preventDefault();">
+                <!-- Amount Input -->
+                <div class="amount-input-box">
+                  <span class="currency-symbol">₹</span>
+                  <input type="number" step="0.01" id="inputAmount" placeholder="0.00" required autofocus />
+                </div>
+
+                <!-- Category Selector -->
+                <div class="form-row">
+                  <label class="input-label">Expense Category</label>
+                  <select id="selectCategory" class="custom-select" required>
+                    <option value="Food">🍔 Food & Dining</option>
+                    <option value="Travel">🚗 Travel & Transport</option>
+                    <option value="Bills">💡 Bills & Utilities</option>
+                    <option value="Shopping">🛍️ Shopping</option>
+                    <option value="Health">💊 Health & Medical</option>
+                    <option value="Entertainment">🎬 Entertainment</option>
+                    <option value="Education">📚 Education</option>
+                    <option value="Others">📦 Others</option>
+                  </select>
+                </div>
+
+                <!-- Payment Method -->
+                <div class="form-row">
+                  <label class="input-label">Payment Mode</label>
+                  <div class="payment-chips" id="paymentChips">
+                    <span class="pay-chip active" data-mode="UPI">UPI / GPay</span>
+                    <span class="pay-chip" data-mode="Card">Card</span>
+                    <span class="pay-chip" data-mode="Cash">Cash</span>
+                    <span class="pay-chip" data-mode="NetBanking">Net Banking</span>
+                  </div>
+                </div>
+
+                <!-- Note / Merchant -->
+                <div class="form-row">
+                  <label class="input-label">Description / Merchant</label>
+                  <input type="text" id="inputNote" placeholder="e.g. Swiggy, Starbucks, Uber, Rent" class="custom-input" required />
+                </div>
+
+                <!-- Date -->
+                <div class="form-row">
+                  <label class="input-label">Date</label>
+                  <input type="date" id="inputDate" class="custom-input" required />
+                </div>
+
+                <button type="submit" class="btn-app-primary" id="btnSaveTransaction">
+                  <i data-lucide="check"></i> Save Debited Expense
+                </button>
+              </form>
+            </div>
+          </div>
+
+          <!-- MODAL: SMS Auto-Expense Parser Simulator -->
+          <div class="app-modal" id="modalSmsSimulator">
+            <div class="modal-backdrop" id="closeSmsModalBackdrop"></div>
+            <div class="modal-sheet">
+              <div class="modal-grabber"></div>
+              <div class="modal-header">
+                <div>
+                  <h4>SMS Debit Parser</h4>
+                  <span class="modal-sub">Auto-detects Debited SMS & Rejects Credits</span>
+                </div>
+                <button class="btn-close-modal" id="btnCloseSmsModal"><i data-lucide="x"></i></button>
+              </div>
+
+              <div class="sms-modal-body">
+                <div class="sms-presets-label">Click a preset bank SMS to test detection:</div>
+                <div class="sms-presets-grid">
+                  <button class="sms-preset-btn" data-template="hdfc">
+                    <span>HDFC (Debit)</span>
+                    <small>₹450 Swiggy</small>
+                  </button>
+                  <button class="sms-preset-btn" data-template="sbi">
+                    <span>SBI (Debit)</span>
+                    <small>₹1,299 Amazon</small>
+                  </button>
+                  <button class="sms-preset-btn" data-template="icici">
+                    <span>ICICI (Debit)</span>
+                    <small>₹380 Uber Trip</small>
+                  </button>
+                  <button class="sms-preset-btn" data-template="salary" style="border-color: rgba(239, 68, 68, 0.4);">
+                    <span style="color: #F87171;">Salary (Credit)</span>
+                    <small>⚠️ Will be Ignored</small>
+                  </button>
+                </div>
+
+                <div class="form-row" style="margin-top: 14px;">
+                  <label class="input-label">SMS Body Text</label>
+                  <textarea id="txtSmsBody" class="custom-textarea" rows="3" placeholder="Paste or type bank SMS message here..."></textarea>
+                </div>
+
+                <div class="parsed-preview-box" id="parsedResultBox" style="display: none;">
+                  <div class="parsed-badge" id="parsedStatusBadge"><i data-lucide="check-circle-2"></i> Auto-Extracted Details</div>
+                  <div class="parsed-grid" id="parsedGridContent">
+                    <div><span>Amount:</span> <strong id="parsedAmt">₹ 0.00</strong></div>
+                    <div><span>Status:</span> <strong id="parsedType">Debited (Valid)</strong></div>
+                    <div><span>Category:</span> <strong id="parsedCat">Food</strong></div>
+                    <div><span>Merchant:</span> <strong id="parsedMerchant">-</strong></div>
+                  </div>
+                  <div id="parsedRejectMessage" style="display: none; color: #F87171; font-size: 0.8rem; line-height: 1.4; margin-top: 6px;">
+                    <i data-lucide="alert-triangle" style="width: 14px; height: 14px; display: inline-block; vertical-align: middle;"></i> 
+                    <strong>Credit SMS Rejected:</strong> This app strictly tracks & calculates <u>debited amounts</u>. Credited messages are ignored.
+                  </div>
+                </div>
+
+                <div class="sms-actions-row">
+                  <button class="btn-app-secondary" id="btnTestParseOnly">
+                    <i data-lucide="scan"></i> Parse Preview
+                  </button>
+                  <button class="btn-app-primary" id="btnParseAndSave">
+                    <i data-lucide="plus-circle"></i> Parse & Save Debit
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Navigation Bar inside phone -->
+          <nav class="mobile-bottom-nav">
+            <button class="nav-item active" id="tabNavHome">
+              <i data-lucide="layout-dashboard"></i>
+              <span>Home</span>
+            </button>
+            <button class="nav-item" id="tabNavAnalytics">
+              <i data-lucide="pie-chart"></i>
+              <span>Analytics</span>
+            </button>
+            <button class="nav-item" id="tabNavSms">
+              <i data-lucide="bot"></i>
+              <span>AI Parser</span>
+            </button>
+            <button class="nav-item" id="tabNavExport">
+              <i data-lucide="download-cloud"></i>
+              <span>Export</span>
+            </button>
+          </nav>
+        </div>
+      </div>
+    </div>
+
+    <!-- Live Demo Sidebar Feature Highlights & Instructions -->
+    <aside class="demo-sidebar">
+      <div class="sidebar-card feature-showcase">
+        <div class="card-title-row">
+          <i data-lucide="sparkles" class="icon-accent"></i>
+          <h3>Key Features Live in this Demo</h3>
+        </div>
+
+        <ul class="feature-checklist">
+          <li>
+            <div class="chk-icon"><i data-lucide="check"></i></div>
+            <div>
+              <strong>Complete Budget & Financial Overview</strong>
+              <p>Real-time calculation of Income, Expenses, Net Balance and Monthly Budget progress.</p>
+            </div>
+          </li>
+          <li>
+            <div class="chk-icon"><i data-lucide="check"></i></div>
+            <div>
+              <strong>Intelligent SMS Expense Detection</strong>
+              <p>Simulate bank SMS regex extraction (HDFC, SBI, ICICI, UPI, Salary credits).</p>
+            </div>
+          </li>
+          <li>
+            <div class="chk-icon"><i data-lucide="check"></i></div>
+            <div>
+              <strong>Rich Category Analytics</strong>
+              <p>Dynamic Donut and Bar charts with category-wise spending distribution.</p>
+            </div>
+          </li>
+          <li>
+            <div class="chk-icon"><i data-lucide="check"></i></div>
+            <div>
+              <strong>Instant CSV / Excel Export</strong>
+              <p>Generate transaction reports and download locally in one click.</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Quick Action Shortcuts in Sidebar -->
+      <div class="sidebar-card quick-shortcuts">
+        <h4>⚡ Quick Testing Controls</h4>
+        <div class="shortcut-buttons">
+          <button class="btn-side" id="sideBtnAddRandom">
+            <i data-lucide="plus"></i> Add Random Expense
+          </button>
+          <button class="btn-side" id="sideBtnSimulateSms">
+            <i data-lucide="message-square"></i> Simulate Swiggy ₹450 SMS
+          </button>
+          <button class="btn-side" id="sideBtnExport">
+            <i data-lucide="file-spreadsheet"></i> Export Current Data (.csv)
+          </button>
+        </div>
+      </div>
+
+      <!-- Native APK Download Card -->
+      <div class="sidebar-card download-box">
+        <div class="dl-header">
+          <div class="dl-icon"><i data-lucide="smartphone"></i></div>
+          <div>
+            <h4>Android Release APK</h4>
+            <span class="dl-version">Version 1.0 (Signed Release)</span>
+          </div>
+        </div>
+        <p class="dl-desc">Download the compiled Android APK to install directly on your Android phone.</p>
+        <a href="./SmartExpensePro-release.apk" class="btn-download-full" download="SmartExpensePro-release.apk">
+          <i data-lucide="download"></i> Download Signed APK (4.6 MB)
+        </a>
+      </div>
+    </aside>
+  </main>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
